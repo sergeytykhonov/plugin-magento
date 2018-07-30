@@ -1,0 +1,13 @@
+{
+    "name": "sergeytykhonov/plugin-magento-liqpay",
+    "type": "magento-module",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Sergey Tykhonov",
+            "email": "sergey.tykhonov@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
