@@ -8,8 +8,7 @@
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="LiqpayMagento\LiqPay\Api\LiqPayCallbackInterface"
                 type="LiqpayMagento\LiqPay\Model\LiqPayCallback"/>
 </config>

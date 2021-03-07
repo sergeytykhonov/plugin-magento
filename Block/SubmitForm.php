@@ -1,5 +1,4 @@
 <?php
-
 /**
  * LiqPay Extension for Magento 2
  *
@@ -12,63 +11,86 @@ namespace LiqpayMagento\LiqPay\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Sales\Model\Order;
-use LiqpayMagento\LiqPay\Sdk\LiqPay;
 use LiqpayMagento\LiqPay\Helper\Data as Helper;
-
+use LiqpayMagento\LiqPay\Sdk\LiqPay;
 
 class SubmitForm extends Template
 {
+    /** @var Order|null */
     protected $_order = null;
 
-    /* @var $_liqPay LiqPay */
+    /* @var LiqPay */
     protected $_liqPay;
 
-    /* @var $_helper Helper */
+    /* @var Helper */
     protected $_helper;
 
+    /**
+     * @param Template\Context $context
+     * @param LiqPay           $liqPay
+     * @param Helper           $helper
+     * @param array            $data
+     */
     public function __construct(
         Template\Context $context,
         LiqPay $liqPay,
         Helper $helper,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
+
         $this->_liqPay = $liqPay;
         $this->_helper = $helper;
     }
 
     /**
      * @return Order
+     *
+     * @throws \Exception
      */
-    public function getOrder()
+    public function getOrder(): Order
     {
         if ($this->_order === null) {
             throw new \Exception('Order is not set');
         }
+
         return $this->_order;
     }
 
+    /**
+     * @param Order $order
+     */
     public function setOrder(Order $order)
     {
         $this->_order = $order;
     }
 
+    /**
+     * @return string|bool
+     */
     protected function _loadCache()
     {
         return false;
     }
 
+    /**
+     * @return string
+     *
+     * @throws \Exception
+     */
     protected function _toHtml()
     {
         $order = $this->getOrder();
-        $html = $this->_liqPay->cnb_form(array(
-            'action' => 'pay',
-            'amount' => $order->getGrandTotal(),
-            'currency' => $order->getOrderCurrencyCode(),
+
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $html = $this->_liqPay->cnb_form([
+            'action'      => 'pay',
+            'amount'      => $order->getGrandTotal(),
+            'currency'    => $order->getOrderCurrencyCode(),
             'description' => $this->_helper->getLiqPayDescription($order),
-            'order_id' => $order->getIncrementId(),
-        ));
+            'order_id'    => $order->getIncrementId(),
+        ]);
+
         return $html;
     }
 }
