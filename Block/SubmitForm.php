@@ -6,6 +6,7 @@
  * @copyright  Copyright (c) 2017 The authors
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  */
+declare(strict_types=1);
 
 namespace LiqpayMagento\LiqPay\Block;
 
@@ -77,8 +78,11 @@ class SubmitForm extends Template
      * @return string
      *
      * @throws \Exception
+     *
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    protected function _toHtml()
+    public function toHtml()
     {
         $order = $this->getOrder();
 
@@ -89,6 +93,8 @@ class SubmitForm extends Template
             'currency'    => $order->getOrderCurrencyCode(),
             'description' => $this->_helper->getLiqPayDescription($order),
             'order_id'    => $order->getIncrementId(),
+            'server_url'  => $this->getUrl('liqpay/liqpay/callback'),
+            'result_url'  => $this->getBaseUrl(),
         ]);
 
         return $html;
