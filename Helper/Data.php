@@ -19,13 +19,14 @@ use Psr\Log\LoggerInterface;
 
 class Data extends AbstractHelper
 {
-    const XML_PATH_IS_ENABLED  = 'payment/liqpaymagento_liqpay/active';
-    const XML_PATH_PUBLIC_KEY  = 'payment/liqpaymagento_liqpay/public_key';
-    const XML_PATH_PRIVATE_KEY = 'payment/liqpaymagento_liqpay/private_key';
-    const XML_PATH_TEST_MODE   = 'payment/liqpaymagento_liqpay/sandbox';
-    const XML_PATH_TEST_ORDER_SURFIX = 'payment/liqpaymagento_liqpay/sandbox_order_surfix';
-    const XML_PATH_DESCRIPTION = 'payment/liqpaymagento_liqpay/description';
-    const XML_PATH_CALLBACK_SECURITY_CHECK = 'payment/liqpaymagento_liqpay/security_check';
+    protected const XML_PATH_IS_ENABLED  = 'payment/liqpaymagento_liqpay/active';
+    protected const XML_PATH_PUBLIC_KEY  = 'payment/liqpaymagento_liqpay/public_key';
+    protected const XML_PATH_PRIVATE_KEY = 'payment/liqpaymagento_liqpay/private_key';
+    protected const XML_PATH_TEST_MODE   = 'payment/liqpaymagento_liqpay/sandbox';
+    protected const XML_PATH_TEST_ORDER_SUFFIX = 'payment/liqpaymagento_liqpay/sandbox_order_surfix';
+    protected const XML_PATH_DESCRIPTION = 'payment/liqpaymagento_liqpay/description';
+    protected const XML_PATH_CALLBACK_SECURITY_CHECK = 'payment/liqpaymagento_liqpay/security_check';
+    protected const XML_PATH_RESULT_URL = 'payment/liqpaymagento_liqpay/result_url';
 
     /**
      * @var PaymentHelper
@@ -42,6 +43,8 @@ class Data extends AbstractHelper
 
         $this->_paymentHelper = $paymentHelper;
     }
+
+    // <editor-fold desc="Settings">
 
     /**
      * @return bool
@@ -68,10 +71,7 @@ class Data extends AbstractHelper
      */
     public function isTestMode(): bool
     {
-        return $this->scopeConfig->isSetFlag(
-            static::XML_PATH_TEST_MODE,
-            ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->isSetFlag(static::XML_PATH_TEST_MODE, ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -79,10 +79,7 @@ class Data extends AbstractHelper
      */
     public function isSecurityCheck(): bool
     {
-        return $this->scopeConfig->isSetFlag(
-            static::XML_PATH_CALLBACK_SECURITY_CHECK,
-            ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->isSetFlag(static::XML_PATH_CALLBACK_SECURITY_CHECK, ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -90,10 +87,7 @@ class Data extends AbstractHelper
      */
     public function getPublicKey(): string
     {
-        return trim($this->scopeConfig->getValue(
-            static::XML_PATH_PUBLIC_KEY,
-            ScopeInterface::SCOPE_STORE
-        ));
+        return \trim($this->scopeConfig->getValue(static::XML_PATH_PUBLIC_KEY, ScopeInterface::SCOPE_STORE));
     }
 
     /**
@@ -101,21 +95,15 @@ class Data extends AbstractHelper
      */
     public function getPrivateKey(): string
     {
-        return trim($this->scopeConfig->getValue(
-            static::XML_PATH_PRIVATE_KEY,
-            ScopeInterface::SCOPE_STORE
-        ));
+        return \trim($this->scopeConfig->getValue(static::XML_PATH_PRIVATE_KEY, ScopeInterface::SCOPE_STORE));
     }
 
     /**
      * @return string
      */
-    public function getTestOrderSurfix(): string
+    public function getTestOrderSuffix(): string
     {
-        return trim($this->scopeConfig->getValue(
-            static::XML_PATH_TEST_ORDER_SURFIX,
-            ScopeInterface::SCOPE_STORE
-        ));
+        return \trim($this->scopeConfig->getValue(static::XML_PATH_TEST_ORDER_SUFFIX, ScopeInterface::SCOPE_STORE));
     }
 
     /**
@@ -125,17 +113,34 @@ class Data extends AbstractHelper
      */
     public function getLiqPayDescription(OrderInterface $order): string
     {
-        $description = trim($this->scopeConfig->getValue(
-            static::XML_PATH_DESCRIPTION,
-            ScopeInterface::SCOPE_STORE
-        ));
+        $description = \trim($this->scopeConfig->getValue(static::XML_PATH_DESCRIPTION, ScopeInterface::SCOPE_STORE));
 
         $params = [
             '{order_id}' => $order->getIncrementId(),
         ];
 
-        return strtr($description, $params);
+        return \strtr($description, $params);
     }
+
+    /**
+     * @return string
+     */
+    public function getResultUrl(): string
+    {
+        $url = \trim($this->scopeConfig->getValue(static::XML_PATH_RESULT_URL, ScopeInterface::SCOPE_STORE));
+
+        if (\preg_match('#^https?://#', $url)) {
+            return $url;
+        }
+
+        if (!$url) {
+            return $this->_urlBuilder->getBaseUrl();
+        }
+
+        return $this->_getUrl($url);
+    }
+
+    // </editor-fold>
 
     /**
      * @param OrderInterface $order
@@ -177,7 +182,7 @@ class Data extends AbstractHelper
         }
 
         $privateKey = $this->getPrivateKey();
-        $generatedSignature = base64_encode(sha1($privateKey . $data . $privateKey, 1));
+        $generatedSignature = \base64_encode(\sha1($privateKey . $data . $privateKey, 1));
 
         return $receivedSignature === $generatedSignature;
     }

@@ -94,7 +94,7 @@ class SubmitForm extends Template
             'description' => $this->_helper->getLiqPayDescription($order),
             'order_id'    => $order->getIncrementId(),
             'server_url'  => $this->getUrl('liqpay/liqpay/callback'),
-            'result_url'  => $this->getBaseUrl(),
+            'result_url'  => $this->_helper->getResultUrl(),
         ]);
 
         return $html;

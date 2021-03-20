@@ -71,10 +71,10 @@ class LiqPay extends \LiqPay
         }
 
         if (isset($params['order_id']) && $this->_helper->isTestMode()) {
-            $surfix = $this->_helper->getTestOrderSurfix();
+            $suffix = $this->_helper->getTestOrderSuffix();
 
-            if (!empty($surfix)) {
-                $params['order_id'] .= self::TEST_MODE_SURFIX_DELIM . $surfix;
+            if (!empty($suffix)) {
+                $params['order_id'] .= self::TEST_MODE_SURFIX_DELIM . $suffix;
             }
         }
 

@@ -236,18 +236,18 @@ class LiqPayCallback implements LiqPayCallbackInterface
      */
     protected function extractSandboxOrderId($orderId)
     {
-        $testOrderSurfix = $this->_helper->getTestOrderSurfix();
+        $testOrderSuffix = $this->_helper->getTestOrderSuffix();
 
-        if (empty($testOrderSurfix)) {
+        if (empty($testOrderSuffix)) {
             return $orderId;
         }
 
-        $testOrderSurfix = LiqPay::TEST_MODE_SURFIX_DELIM . $testOrderSurfix;
+        $testOrderSuffix = LiqPay::TEST_MODE_SURFIX_DELIM . $testOrderSuffix;
 
-        if (strlen($testOrderSurfix) < strlen($orderId)
-            && substr($orderId, -strlen($testOrderSurfix)) === $testOrderSurfix
+        if (strlen($testOrderSuffix) < strlen($orderId)
+            && substr($orderId, -strlen($testOrderSuffix)) === $testOrderSuffix
         ) {
-            return substr($orderId, 0, strlen($orderId) - strlen($testOrderSurfix));
+            return substr($orderId, 0, strlen($orderId) - strlen($testOrderSuffix));
         }
 
         return $orderId;
