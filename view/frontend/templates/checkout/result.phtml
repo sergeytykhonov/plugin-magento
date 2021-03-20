@@ -1,0 +1,15 @@
+<?php
+/** @var \LiqpayMagento\LiqPay\Block\Result $block */
+
+/** @var \Magento\Sales\Model\Order|null $order */
+$order = $block->getOrder();
+?>
+<h1><?= __('Order Result') ?></h1>
+
+<div>
+    <?php if ($order): ?>
+        <?= __('Order #%1 has been successfully created.', $order->getIncrementId()) ?>
+    <?php else: ?>
+        <?= __('Order has not been created or your session has been expired.') ?>
+    <?php endif; ?>
+</div>
