@@ -19,7 +19,11 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="sandbox" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+
+                <field id="sandbox" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Test Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -29,17 +33,34 @@
                     <comment><![CDATA[For example: 000000005-<b>test</b>]]></comment>
                 </field>
 
-                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Title</label>
-                </field>
-
                 <field id="public_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Public Key</label>
+                    <depends>
+                        <field id="sandbox">0</field>
+                    </depends>
                 </field>
 
                 <field id="private_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="sandbox">0</field>
+                    </depends>
+                </field>
+
+                <field id="test_public_key" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Test Public Key</label>
+                    <depends>
+                        <field id="sandbox">1</field>
+                    </depends>
+                </field>
+
+                <field id="test_private_key" translate="label" type="obscure" sortOrder="51" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Test Private Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="sandbox">1</field>
+                    </depends>
                 </field>
 
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">

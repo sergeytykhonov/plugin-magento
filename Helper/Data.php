@@ -24,6 +24,8 @@ class Data extends AbstractHelper
     protected const XML_PATH_PRIVATE_KEY = 'payment/liqpaymagento_liqpay/private_key';
     protected const XML_PATH_TEST_MODE   = 'payment/liqpaymagento_liqpay/sandbox';
     protected const XML_PATH_TEST_ORDER_SUFFIX = 'payment/liqpaymagento_liqpay/sandbox_order_surfix';
+    protected const XML_PATH_TEST_PUBLIC_KEY  = 'payment/liqpaymagento_liqpay/test_public_key';
+    protected const XML_PATH_TEST_PRIVATE_KEY = 'payment/liqpaymagento_liqpay/test_private_key';
     protected const XML_PATH_DESCRIPTION = 'payment/liqpaymagento_liqpay/description';
     protected const XML_PATH_CALLBACK_SECURITY_CHECK = 'payment/liqpaymagento_liqpay/security_check';
     protected const XML_PATH_RESULT_URL = 'payment/liqpaymagento_liqpay/result_url';
@@ -87,7 +89,9 @@ class Data extends AbstractHelper
      */
     public function getPublicKey(): string
     {
-        return \trim($this->scopeConfig->getValue(static::XML_PATH_PUBLIC_KEY, ScopeInterface::SCOPE_STORE));
+        $key = $this->isTestMode() ? static::XML_PATH_TEST_PUBLIC_KEY : static::XML_PATH_PUBLIC_KEY;
+
+        return \trim($this->scopeConfig->getValue($key, ScopeInterface::SCOPE_STORE));
     }
 
     /**
@@ -95,7 +99,9 @@ class Data extends AbstractHelper
      */
     public function getPrivateKey(): string
     {
-        return \trim($this->scopeConfig->getValue(static::XML_PATH_PRIVATE_KEY, ScopeInterface::SCOPE_STORE));
+        $key = $this->isTestMode() ? static::XML_PATH_TEST_PRIVATE_KEY : static::XML_PATH_PRIVATE_KEY;
+
+        return \trim($this->scopeConfig->getValue($key, ScopeInterface::SCOPE_STORE));
     }
 
     /**
